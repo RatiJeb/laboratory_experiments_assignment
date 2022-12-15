@@ -21,7 +21,7 @@ class PlateContentGeneratorService < ApplicationService
 
   def get_plate
     template = {
-      '96': [12, 8],
+      '96': [8, 12],
       '384': [16, 24]
     }
     template[@plate_size.to_s.to_sym]
