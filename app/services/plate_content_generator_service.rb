@@ -12,6 +12,14 @@ class PlateContentGeneratorService < ApplicationService
     insert_data_into_plate
   end
 
+  def plate
+    result = ""
+    @plate.each do |row|
+      result += (row.to_s + "\n")
+    end
+    result
+  end
+
   private
 
   def create_plate
@@ -32,7 +40,7 @@ class PlateContentGeneratorService < ApplicationService
     (0...@samples.length).each do |i|
       array = []
       @samples[i].each do |sample|
-        mixture = sample.to_s + ' + ' + @reagents[i][0].to_s
+        mixture = [sample.to_s, @reagents[i][0].to_s]
         replicates = []
         @replicates[i].times do
           replicates << mixture

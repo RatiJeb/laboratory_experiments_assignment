@@ -6,6 +6,7 @@ class LaboratoryExperimentsController < ApplicationController
   def create
     service = PlateContentGeneratorService.new(create_params)
     service.call
+    render plain: service.plate
   end
 
   private
