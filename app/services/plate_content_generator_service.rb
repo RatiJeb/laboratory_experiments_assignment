@@ -9,6 +9,7 @@ class PlateContentGeneratorService < ApplicationService
   def call
     create_plate
     generate_experiment_results
+    # binding.irb
     insert_data_into_plate
   end
 
@@ -37,15 +38,19 @@ class PlateContentGeneratorService < ApplicationService
 
   def generate_experiment_results
     @result = []
-    (0...@samples.length).each do |i|
+    (0...@reagents.length).each do |i|
       array = []
-      @samples[i].each do |sample|
-        mixture = [sample.to_s, @reagents[i][0].to_s]
-        replicates = []
-        @replicates[i].times do
-          replicates << mixture
+      @reagents[i].each do |reagent|
+        array2 = []
+        @samples[i].each do |sample|
+          mixture = [sample.to_s, reagent.to_s]
+          replicates = []
+          @replicates[i].times do
+            replicates << mixture
+          end
+          array2 << replicates
         end
-        array << replicates
+        array << array2
       end
       @result << array
     end
@@ -54,12 +59,16 @@ class PlateContentGeneratorService < ApplicationService
   def insert_data_into_plate
     prev_exp = 0
     (0...@result.length).each do |experiment|
-      (0...@result[experiment].length).each do |mixture|
-        (0...@result[experiment][mixture].length).each do |replicate|
-          @plate[mixture][replicate+prev_exp] = @result[experiment][mixture][replicate]
+      (0...@result[experiment].length).each do |reagent|
+        (0...@result[experiment][reagent].length).each do |mixture|
+          (0...@result[experiment][reagent][mixture].length).each do |replicate|
+            @plate[mixture][replicate+prev_exp] = @result[experiment][reagent][mixture][replicate]
+            # binding.irb
+          end
         end
+        prev_exp += @replicates[reagent]
       end
-      prev_exp += @replicates[experiment]
+      prev_exp += @replicates[experiment] - 2
     end
   end
 end
