@@ -3,7 +3,7 @@
   <% @plate.each do |column| %>
     <tr>
     <% column.each do |row| %>
-      <%= render inline: "<td bgcolor=\"#{row[:reagent]}\">#{row[:sample]}</td>" %>
+      <%= render inline: "<td bgcolor=\"#{row[:reagent]}\" width=70 height=60>#{row[:sample]}</td>" %>
     <% end %>
     </br>
     </tr>
