@@ -57,6 +57,7 @@ class PlateContentGeneratorService < ApplicationService
   end
 
   def insert_data_into_plate
+    #x offset
     prev_exp = 0
     (0...@result.length).each do |experiment|
       (0...@result[experiment].length).each do |reagent|
@@ -68,6 +69,7 @@ class PlateContentGeneratorService < ApplicationService
         end
         prev_exp += @replicates[reagent]
       end
+      #correct x offset
       prev_exp += @replicates[experiment] - 2
     end
   end
