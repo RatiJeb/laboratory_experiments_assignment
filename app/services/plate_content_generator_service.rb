@@ -1,4 +1,5 @@
 class PlateContentGeneratorService < ApplicationService
+  attr_reader :plate
   def initialize(params)
     @plate_size = params[:plate_size]
     @samples =  params[:samples]
@@ -13,19 +14,11 @@ class PlateContentGeneratorService < ApplicationService
     insert_data_into_plate
   end
 
-  def plate
-    result = ""
-    @plate.each do |row|
-      result += (row.to_s + "\n")
-    end
-    result
-  end
-
   private
 
   def create_plate
     plate_template = get_plate
-    @plate = Array.new(plate_template[0]) { Array.new(plate_template[1]) }
+    @plate = Array.new(plate_template[0]) { Array.new(plate_template[1], {reagent: nil, sample: nil}) }
   end
 
   def get_plate
@@ -43,7 +36,7 @@ class PlateContentGeneratorService < ApplicationService
       @reagents[i].each do |reagent|
         array2 = []
         @samples[i].each do |sample|
-          mixture = [sample.to_s, reagent.to_s]
+          mixture = {sample: sample.to_s, reagent: reagent.to_s}
           replicates = []
           @replicates[i].times do
             replicates << mixture

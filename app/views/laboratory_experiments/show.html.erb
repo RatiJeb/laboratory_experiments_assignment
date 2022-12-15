@@ -1,0 +1,11 @@
+<%#= @plate %>
+<table border="1">
+  <% @plate.each do |column| %>
+    <tr>
+    <% column.each do |row| %>
+      <%= render inline: "<td bgcolor=\"#{row[:reagent]}\">#{row[:sample]}</td>" %>
+    <% end %>
+    </br>
+    </tr>
+  <% end %>
+</table>
