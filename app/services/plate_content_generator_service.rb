@@ -60,10 +60,8 @@ class PlateContentGeneratorService < ApplicationService
             # binding.irb
           end
         end
-        prev_exp += @replicates[reagent]
+        prev_exp += @replicates[experiment]
       end
-      #correct x offset
-      prev_exp += @replicates[experiment] - 2
     end
   end
 end
