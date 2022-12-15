@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  # root to: "laboratory_experiments#new"
+  # post "laboratory/experiments", to: "laboratory_experiments#create"
+  root to: "laboratory_experiments#create"
 end
