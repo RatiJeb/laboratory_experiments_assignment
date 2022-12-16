@@ -5,20 +5,8 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version - 3.0.4
 
-* System dependencies
+* Rails version - 7.0.4
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* To launch application you have to execute command rails s (default port is localhost:3000). You can change test input parameters on LabExperimentsProject/app/controllers/laboratory_experiments_controller.rb -> create_params on line :15. once parameters are typed in correctly, you can open localhost:3000 or 127.0.0.1:3000 in your browser and generated output will be displayed there.
