@@ -51,16 +51,23 @@ class PlateContentGeneratorService < ApplicationService
 
   def insert_data_into_plate
     #x offset
-    prev_exp = 0
+    current_pivot_x = 0
+    offset = 0
     (0...@result.length).each do |experiment|
       (0...@result[experiment].length).each do |reagent|
         (0...@result[experiment][reagent].length).each do |mixture|
+          skip = 0
           (0...@result[experiment][reagent][mixture].length).each do |replicate|
-            @plate[mixture][replicate+prev_exp] = @result[experiment][reagent][mixture][replicate]
-            # binding.irb
+            if replicate+current_pivot_x >= get_plate[1]
+              # binding.irb
+              offset = replicate if offset == 0
+              current_pivot_x -= offset
+              skip += 1
+            end
+            @plate[mixture+skip][replicate+current_pivot_x] = @result[experiment][reagent][mixture][replicate]
           end
         end
-        prev_exp += @replicates[experiment]
+        current_pivot_x += @replicates[experiment]
       end
     end
   end
