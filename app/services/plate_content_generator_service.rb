@@ -5,20 +5,20 @@ class PlateContentGeneratorService < ApplicationService
     @samples =  params[:samples]
     @reagents =  params[:reagents]
     @replicates = params[:replicates]
+    @plate = []
   end
 
   def call
     create_plate
     generate_experiment_results
-    # binding.irb
-    insert_data_into_plate
+    insert_data_into_plates
   end
 
   private
 
   def create_plate
     plate_template = get_plate
-    @plate = Array.new(plate_template[0]) { Array.new(plate_template[1], {reagent: nil, sample: nil}) }
+    @plate << Array.new(plate_template[0]) { Array.new(plate_template[1], {reagent: nil, sample: nil}) }
   end
 
   def get_plate
@@ -49,22 +49,32 @@ class PlateContentGeneratorService < ApplicationService
     end
   end
 
-  def insert_data_into_plate
+  def insert_data_into_plates
     #x offset
     current_pivot_x = 0
-    offset = 0
+    plate = 0
     (0...@result.length).each do |experiment|
       (0...@result[experiment].length).each do |reagent|
+        overlap = nil
         (0...@result[experiment][reagent].length).each do |mixture|
           skip = 0
           (0...@result[experiment][reagent][mixture].length).each do |replicate|
-            if replicate+current_pivot_x >= get_plate[1]
-              # binding.irb
-              offset = replicate if offset == 0
-              current_pivot_x -= offset
-              skip += 1
+            # binding.irb
+            if replicate == 0 && overlap
+              plate -= 1
+              current_pivot_x += get_plate[1]
             end
-            @plate[mixture+skip][replicate+current_pivot_x] = @result[experiment][reagent][mixture][replicate]
+            if replicate+current_pivot_x >= get_plate[1]
+              plate += 1
+              create_plate unless overlap
+              current_pivot_x -= get_plate[1]
+              overlap = true
+            end
+            if mixture+skip >= get_plate[0]
+              current_pivot_x += @replicates[experiment]
+              skip -= mixture
+            end
+            @plate[plate][mixture+skip][replicate+current_pivot_x] = @result[experiment][reagent][mixture][replicate]
           end
         end
         current_pivot_x += @replicates[experiment]

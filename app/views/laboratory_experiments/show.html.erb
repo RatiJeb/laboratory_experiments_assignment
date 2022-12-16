@@ -1,11 +1,14 @@
-<%#= @plate %>
-<table border="1">
-  <% @plate.each do |column| %>
-    <tr>
-    <% column.each do |row| %>
-      <%= render inline: "<td bgcolor=\"#{row[:reagent]}\" width=70 height=60>#{row[:sample]}</td>" %>
+<% plate = 1 %>
+<% @plate.each do |experiment| %>
+  </br><h1>Plate #<%= plate %></h1></br>
+  <table border="1">
+    <% experiment.each do |column| %>
+      <tr>
+        <% column.each do |row| %>
+          <%= render inline: "<td bgcolor=\"#{row[:reagent]}\" width=70 height=60>#{row[:sample]}</td>" %>
+        <% end %>
+      </tr>
     <% end %>
-    </br>
-    </tr>
-  <% end %>
-</table>
+  </table>
+  <% plate += 1 %>
+<% end %>
